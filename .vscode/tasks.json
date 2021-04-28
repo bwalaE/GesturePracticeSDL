@@ -10,11 +10,14 @@
 				"src\\main.cpp",
 				"-o",
 				"build\\game.exe",
-				"-IC:/SDL2/SDL2-devel-2.0.14-mingw/SDL2-2.0.14/x86_64-w64-mingw32/include",
+				"-IC:/SDL2/SDL2-devel-2.0.14-mingw/SDL2-2.0.14/x86_64-w64-mingw32/include/SDL2",
+				"-IC:/SDL2/SDL2ExtensionLibs/SDL2_image/include/SDL2", //SDL2_image include
 				"-LC:/SDL2/SDL2-devel-2.0.14-mingw/SDL2-2.0.14/x86_64-w64-mingw32/lib",
+				"-LC:/SDL2/SDL2ExtensionLibs/SDL2_image/lib", //SDL2_image lib
 				"-lmingw32",
 				"-lSDL2main",
 				"-lSDL2",
+				"-lSDL2_image"
 				//"-mwindows" // uncommenting this makes printf logs stop working
 			],
 			"options": {
