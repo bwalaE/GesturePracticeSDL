@@ -12,39 +12,39 @@ int SCREEN_YPOS;
 bool display2 = false;
 
 class MenuTexture {
-	public:
-		//Initializes variables
-		MenuTexture();
+public:
+	//Initializes variables
+	MenuTexture();
 
-		//Deallocates memory
-		~MenuTexture();
+	//Deallocates memory
+	~MenuTexture();
 
-		//Loads image at specified path
-		bool loadFromFile( std::string path );
+	//Loads image at specified path
+	bool loadFromFile(std::string path);
 
-		//Deallocates texture
-		void free();
+	//Deallocates texture
+	void free();
 
-		//Renders texture at given point
-		void render( int x, int y, SDL_Rect* clip = NULL );
+	//Renders texture at given point
+	void render(int x, int y, SDL_Rect* clip = NULL);
 
-		//Gets image dimensions
-		int getWidth();
-		int getHeight();
+	//Gets image dimensions
+	int getWidth();
+	int getHeight();
 
-		//image dimension setters
-		void setWidth( int x );
-		void setHeight( int x );
+	//image dimension setters
+	void setWidth(int x);
+	void setHeight(int x);
 
-		//gets SDL_Texture
-		SDL_Texture* getTexture();
+	//gets SDL_Texture
+	SDL_Texture* getTexture();
 
-	private:
-		SDL_Texture* mTexture;
+private:
+	SDL_Texture* mTexture;
 
-		//Image dimensions
-		int mWidth;
-		int mHeight;
+	//Image dimensions
+	int mWidth;
+	int mHeight;
 };
 
 //Starts up SDL and creates window
@@ -63,7 +63,7 @@ void fitWindow(int w, int h, int x, int y);
 void close();
 
 //loads a texture
-SDL_Texture* loadTexture( std::string path );
+SDL_Texture* loadTexture(std::string path);
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -85,19 +85,19 @@ MenuTexture logoTexture;
 SDL_Rect gTriRect;
 SDL_Rect gLogoRect;
 
-MenuTexture::MenuTexture(){
+MenuTexture::MenuTexture() {
 	//initialize
 	mTexture = NULL;
 	mWidth = 0;
 	mHeight = 0;
 }
 
-MenuTexture::~MenuTexture(){
+MenuTexture::~MenuTexture() {
 	//deallocate
 	free();
 }
 
-bool MenuTexture::loadFromFile( std::string path ){
+bool MenuTexture::loadFromFile(std::string path) {
 	//Get rid of preexisting texture
 	free();
 
@@ -105,21 +105,21 @@ bool MenuTexture::loadFromFile( std::string path ){
 	SDL_Texture* newTexture = NULL;
 
 	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	if( loadedSurface == NULL )
+	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+	if (loadedSurface == NULL)
 	{
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
 	}
 	else
 	{
 		//Color key image
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0xFE, 0x52, 0xE9 ) );
+		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0xFE, 0x52, 0xE9));
 
 		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-		if( newTexture == NULL )
+		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+		if (newTexture == NULL)
 		{
-			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 		}
 		else
 		{
@@ -129,7 +129,7 @@ bool MenuTexture::loadFromFile( std::string path ){
 		}
 
 		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
+		SDL_FreeSurface(loadedSurface);
 	}
 
 	//Return success
@@ -137,30 +137,30 @@ bool MenuTexture::loadFromFile( std::string path ){
 	return mTexture != NULL;
 }
 
-void MenuTexture::free(){
-	if( mTexture != NULL )
+void MenuTexture::free() {
+	if (mTexture != NULL)
 	{
-		SDL_DestroyTexture( mTexture );
+		SDL_DestroyTexture(mTexture);
 		mTexture = NULL;
 		mWidth = 0;
 		mHeight = 0;
 	}
 }
 
-void MenuTexture::render( int x, int y, SDL_Rect* clip ){
+void MenuTexture::render(int x, int y, SDL_Rect* clip) {
 
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
 	//Set clip rendering dimensions
-	if( clip != NULL )
+	if (clip != NULL)
 	{
 		renderQuad.w = clip->w;
 		renderQuad.h = clip->h;
 	}
 
 	//Render to screen
-	SDL_RenderCopy( gRenderer, mTexture, clip, &renderQuad );
+	SDL_RenderCopy(gRenderer, mTexture, clip, &renderQuad);
 }
 
 int MenuTexture::getWidth()
@@ -173,11 +173,11 @@ int MenuTexture::getHeight()
 	return mHeight;
 }
 
-void MenuTexture::setWidth( int x ) {
+void MenuTexture::setWidth(int x) {
 	mWidth = x;
 }
 
-void MenuTexture::setHeight( int x ) {
+void MenuTexture::setHeight(int x) {
 	mHeight = x;
 }
 
@@ -199,9 +199,9 @@ bool init()
 	else
 	{
 		//Set texture filtering to linear
-		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 		{
-			printf( "Warning: Linear texture filtering not enabled!" );
+			printf("Warning: Linear texture filtering not enabled!");
 		}
 
 		//Monitor 1 or 2?
@@ -223,29 +223,29 @@ bool init()
 		else // window created successfully
 		{
 			//Create renderer for window
-			gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
-			if( gRenderer == NULL )
+			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+			if (gRenderer == NULL)
 			{
-				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 				success = false;
 			}
 			else
 			{
 				//Initialize renderer color
-				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
 				//Initialize PNG loading
 				int imgFlags = IMG_INIT_PNG;
-				if( !( IMG_Init( imgFlags ) & imgFlags ) )
+				if (!(IMG_Init(imgFlags) & imgFlags))
 				{
-					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
 				}
 
-				 //Initialize SDL_ttf
-				if( TTF_Init() == -1 )
+				//Initialize SDL_ttf
+				if (TTF_Init() == -1)
 				{
-					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 					success = false;
 				}
 			}
@@ -255,15 +255,15 @@ bool init()
 	return success;
 }
 
-bool loadImages(){
+bool loadImages() {
 	bool success = true;
 
 	//load images onto the textures
-	if ( !triTexture.loadFromFile("res/tri.png") ) {
+	if (!triTexture.loadFromFile("res/tri.png")) {
 		printf("Failed to map png image to texture\n", SDL_GetError());
 		success = false;
 	}
-	else if ( !logoTexture.loadFromFile("res/logo.png") ) {
+	else if (!logoTexture.loadFromFile("res/logo.png")) {
 		printf("Failed to map png image to texture\n", SDL_GetError());
 		success = false;
 	}
@@ -277,7 +277,7 @@ bool loadMedia()
 	bool success = true;
 
 	//Load PNG texture
-	if ( !loadImages() )
+	if (!loadImages())
 	{
 		printf("Error loading images! SDL Error: %s\n", SDL_GetError());
 		success = false;
@@ -311,8 +311,8 @@ void close()
 	triTexture.free();
 
 	//Destroy window	
-	SDL_DestroyRenderer( gRenderer );
-	SDL_DestroyWindow( gWindow );
+	SDL_DestroyRenderer(gRenderer);
+	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
 	gRenderer = NULL;
 
@@ -322,28 +322,28 @@ void close()
 	SDL_Quit();
 }
 
-SDL_Texture* loadTexture( std::string path )
+SDL_Texture* loadTexture(std::string path)
 {
 	//The final texture
 	SDL_Texture* newTexture = NULL;
 
 	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	if( loadedSurface == NULL )
+	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+	if (loadedSurface == NULL)
 	{
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
 	}
 	else
 	{
 		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-		if( newTexture == NULL )
+		newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+		if (newTexture == NULL)
 		{
-			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 		}
 
 		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
+		SDL_FreeSurface(loadedSurface);
 	}
 
 	return newTexture;
@@ -391,19 +391,19 @@ int main(int argc, char* args[])
 				//SDL_UpdateWindowSurface(gWindow);
 
 				//Clear screen
-				SDL_SetRenderDrawColor( gRenderer, 0x50, 0x50, 0x50, 0xFF );
-				SDL_RenderClear( gRenderer );
+				SDL_SetRenderDrawColor(gRenderer, 0x50, 0x50, 0x50, 0xFF);
+				SDL_RenderClear(gRenderer);
 
 				//render menu
 				//renderMenuImages();
-				SDL_RenderSetViewport( gRenderer, &gLogoRect );
-				SDL_RenderCopy( gRenderer, logoTexture.getTexture(), NULL, NULL );
+				SDL_RenderSetViewport(gRenderer, &gLogoRect);
+				SDL_RenderCopy(gRenderer, logoTexture.getTexture(), NULL, NULL);
 				//renderButtons();
-				SDL_RenderSetViewport( gRenderer, &gTriRect );
-				SDL_RenderCopy( gRenderer, triTexture.getTexture(), NULL, NULL );
-				
+				SDL_RenderSetViewport(gRenderer, &gTriRect);
+				SDL_RenderCopy(gRenderer, triTexture.getTexture(), NULL, NULL);
+
 				//Update screen
-				SDL_RenderPresent( gRenderer );
+				SDL_RenderPresent(gRenderer);
 			}
 		}
 	}
