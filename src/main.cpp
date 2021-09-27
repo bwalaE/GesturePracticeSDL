@@ -1,8 +1,12 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <windows.h>
 #include <stdio.h>
 #include <string>
+
+//command event constants
+#define LAUNCH_SDL_WINDOW 1
 
 //screen properties, which are set in init()
 int SCREEN_WIDTH;
@@ -47,35 +51,23 @@ class MenuTexture {
 		int mHeight;
 };
 
-//Starts up SDL and creates window
+LRESULT CALLBACK WindowProcedure(HWND,UINT,WPARAM,LPARAM); //handles events in the menu window
+void AddControls(HWND); //adds UI to the menu window
+void SDLWindowMain(); //does all the SDL window-loading stuff
+
 bool init();
-
-//loads the images onto their textures
 bool loadImages();
-
-//Loads media
 bool loadMedia();
 
-//fit and position screen
 void fitWindow(int w, int h, int x, int y);
 
-//Frees media and shuts down SDL
 void close();
 
-//loads a texture
-SDL_Texture* loadTexture( std::string path );
-
-//The window we'll be rendering to
-SDL_Window* gWindow = NULL;
-
-//The surface contained by the window
-SDL_Surface* gScreenSurface = NULL;
-
-//tri button surface
-SDL_Surface* triBtnSurface = NULL;
-
-//general renderer
-SDL_Renderer* gRenderer = NULL;
+SDL_Texture* loadTexture( std::string path ); //loads a texture
+SDL_Window* gWindow = NULL; //The window we'll be rendering to
+SDL_Surface* gScreenSurface = NULL; //The surface contained by the window
+SDL_Surface* triBtnSurface = NULL; //tri button surface
+SDL_Renderer* gRenderer = NULL; //general renderer
 
 //textures
 MenuTexture triTexture;
@@ -349,7 +341,7 @@ SDL_Texture* loadTexture( std::string path )
 	return newTexture;
 }
 
-int main(int argc, char* args[])
+void SDLWindowMain()
 {
 	//Start up SDL and create window
 	if (!init())
@@ -410,6 +402,62 @@ int main(int argc, char* args[])
 
 	//Free resources and close SDL
 	close();
+}
+
+//handling events in the menu window
+LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
+
+	switch (msg) {
+		case WM_COMMAND:
+			switch(wp) {
+				case LAUNCH_SDL_WINDOW:
+					SDLWindowMain();
+					break;
+				default:
+					break;
+			}
+			break;
+		case WM_CREATE: //the window was just created
+			AddControls(hWnd);
+			break;
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			break;
+		default:
+			return DefWindowProcW(hWnd, msg, wp, lp);
+	}
+}
+
+void AddControls(HWND hWnd) {
+
+	CreateWindowW(L"Button",L"Launch SDL Window",WS_VISIBLE | WS_CHILD,200,180,200,50,hWnd,(HMENU)LAUNCH_SDL_WINDOW,NULL,NULL);
+
+}
+
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdshow)
+{
+
+	WNDCLASSW wc = {0};
+
+	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
+	wc.hCursor = LoadCursor(NULL,IDC_ARROW);
+	wc.hInstance = hInst;
+	wc.lpszClassName = L"myWindowClass";
+	wc.lpfnWndProc = WindowProcedure;
+
+	if(!RegisterClassW(&wc))
+		return -1;
+
+	CreateWindowW(L"myWindowClass",L"Jack's cool window",WS_OVERLAPPEDWINDOW | WS_VISIBLE,100,100,500,500,NULL,NULL,NULL,NULL);
+	MSG msg =  {0};
+
+	while( GetMessage(&msg,NULL,NULL,NULL ) )
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	//loadSDLWindow();
 
 	return 0;
 }

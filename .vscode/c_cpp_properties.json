@@ -5,8 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:\\SDL2\\SDL2-devel-2.0.14-mingw\\SDL2-2.0.14\\x86_64-w64-mingw32\\include\\SDL2",
-                "C:\\SDL2\\SDL2ExtensionLibs\\SDL2_image\\include\\SDL2",
-                "C:\\SDL2\\SDL2ExtensionLibs\\SDL2_ttf\\include\\SDL2"
+                "C:\\SDL2\\SDL2_image-devel-2.0.5-mingw\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\include\\SDL2",
+                "C:\\SDL2\\SDL2_ttf-devel-2.0.15-mingw\\SDL2_ttf-2.0.15\\x86_64-w64-mingw32\\include\\SDL2"
             ],
             "defines": [
                 "_DEBUG",
